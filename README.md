@@ -1,12 +1,24 @@
 # arduino-thc
 Arduino BLE Time Hacker Clock
 
+## Features
+
+* Bluetooth BLE, constrollable via mobile phone
+* Realtime clock
+* Support for various NeoPixel lighting modules
+
 ## Parts
 
-* Adafruit Feather 32u4 Bluefruit LE https://www.adafruit.com/product/2829
-* NeoPixel FeatherWing - 4x8 RGB LED https://www.adafruit.com/product/2945
-* Adafruit DS3231 Precision RTC Breakout:   https://www.adafruit.com/product/3013
-* Enclosure: https://www.allelectronics.com/item/1551-fbk/pocket-size-project-box/1.html
+* [Adafruit Feather 32u4 Bluefruit LE](https://www.adafruit.com/product/2829)
+* Adafruit NeoPixels:
+  * [NeoPixel 5050 RGB LED](https://www.adafruit.com/product/1655 )
+  * [NeoPixel Stick - 8 x 5050 RGB LED](https://www.adafruit.com/product/1426)
+  * [NeoPixel Ring - 12 x 5050 RGB LED](https://www.adafruit.com/product/1643)
+  * [NeoPixel Ring - 16 x 5050 RGB LED](https://www.adafruit.com/product/1463)
+  * [NeoPixel FeatherWing - 4x8 RGB LED](https://www.adafruit.com/product/2945)
+* [Adafruit DS3231 Precision RTC Breakout](https://www.adafruit.com/product/3013)
+* Enclosures:
+  * https://www.allelectronics.com/item/1551-fbk/pocket-size-project-box/1.html
 
 ## Software
 
