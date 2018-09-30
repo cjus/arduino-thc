@@ -24,6 +24,9 @@ uint32_t currentColor = strip.Color(0, 0, 0);
 uint32_t lastColor = currentColor;
 uint8_t startHourSet = 5; // 5am
 uint8_t endHourSet = 20; // 8pm
+uint32_t startTime;
+uint32_t endTime;
+
 uint8_t currentLEDCount = LEDS;
 uint8_t lastPercentRemaining = 0;
 
@@ -34,10 +37,19 @@ void setup() {
 //  delay(3000); // wait for console opening
 //  Serial.print();
 //  Serial.println();
+
   rtc.begin();
+  setTimeVars();
+
   strip.begin();
-  strip.show();
   setupBLE();
+  reset();
+}
+
+void setTimeVars() {
+  DateTime now = rtc.now();
+  startTime = DateTime(now.year(), now.month(), now.day(), startHourSet, 0, 0).unixtime();
+  endTime = DateTime(now.year(), now.month(), now.day(), endHourSet, 0, 0).unixtime();
 }
 
 void reset() {
@@ -45,6 +57,7 @@ void reset() {
   currentColor = strip.Color(0, 0, 0);
   currentLEDCount = LEDS;
   setMatrix(currentColor, currentLEDCount);
+  setTimeVars();
 }
 
 void setupBLE(void) {
@@ -53,27 +66,23 @@ void setupBLE(void) {
   }
 
   ble.factoryReset();
-
-  /* Disable command echo from Bluefruit */
-  ble.echo(false);
-
+  ble.echo(false); // Disable command echo from Bluefruit
   ble.verbose(false);  // debug info is a little annoying after this point!
-
   delay(2000);
+
   ble.print("AT+GAPDEVNAME=");
   ble.println("Time Hacker Clock");
 
   /* Wait for connection */
-  while (!ble.isConnected()) {
-    delay(500);
-  }
+  // while (!ble.isConnected()) {
+  //   delay(500);
+  // }
+  // delay(2000);
 
-  delay(2000);
   ble.print("AT+BLEUARTTX=");
   ble.println("Time Hacker Clock ver 0.3.0");
   ble.println("");
   ble.waitForOK();
-
   delay(1000);
   reset();
 }
@@ -84,8 +93,6 @@ void loop() {
   DateTime now = rtc.now();
   float percentFactor = 100.0;
   uint32_t curTime = now.unixtime();
-  uint32_t startTime = DateTime(now.year(), now.month(), now.day(), startHourSet, 0, 0).unixtime();
-  uint32_t endTime = DateTime(now.year(), now.month(), now.day(), endHourSet, 0, 0).unixtime();
 
   if (curTime < startTime || curTime > endTime) {
     reset();
@@ -111,6 +118,9 @@ void loop() {
 }
 
 void processBLECommands() {
+  if (!ble.isConnected()) {
+    return;
+  }
   // Check for incoming characters from Bluefruit
   ble.println("AT+BLEUARTRX");
   ble.readline();
@@ -120,85 +130,28 @@ void processBLECommands() {
     return;
   }
 
-  if (strcmp(ble.buffer, "rt") == 0) {
-    reset();
-    ble.print("AT+BLEUARTTX=");
-    ble.println("reset\n");
-    ble.waitForOK();
+  if (strcmp(ble.buffer, "rst") == 0) {
+    handleReset();
+    return;
   }
 
-  else if (command.startsWith("ti")) {
-    DateTime now = rtc.now();
-    ble.print("AT+BLEUARTTX=");
-    ble.print(now.hour());
-    ble.print(now.minute());
-    ble.print(now.second());
-    ble.println(" ");
-    ble.waitForOK();
+  if (command.startsWith("gtm")) {
+    handleGetTime();
+    return;
   }
 
-  else if (command.startsWith("dt")) {
-    DateTime now = rtc.now();
-    ble.print("AT+BLEUARTTX=");
-    ble.print(now.year());
-    ble.print(now.month());
-    ble.print(now.day());
-    ble.println(" ");
-    ble.waitForOK();
+  if (command.startsWith("gdt")) {
+    handleGetDate();
+    return;
   }
 
-  else if (command.startsWith("sc")) {
-    String value = command.substring(2);
-    value.trim();
-
-    if (value.length() != 15) {
-      // 20180929 183429
-      ble.print("AT+BLEUARTTX=");
-      ble.println("Invalid date format use: yyyymmdd hhmmss");
-      ble.println(" ");
-      ble.waitForOK();
-      return;
-    }
-
-    int16_t year = (value.substring(0, 4)).toInt();
-    int8_t month = (value.substring(4, 6)).toInt();
-    int8_t day = (value.substring(6, 8)).toInt();
-    int8_t hour = (value.substring(9, 11)).toInt();
-    int8_t minute = (value.substring(11, 13)).toInt();
-    int8_t second = (value.substring(13)).toInt();
-
-    rtc.adjust(DateTime(year, month, day, hour, minute, second));
-    DateTime now = rtc.now();
-
-    ble.print("AT+BLEUARTTX=");
-    ble.print("clock set to: ");
-    ble.print(now.year());
-    ble.print(now.month());
-    ble.print(now.day());
-    ble.print(" ");
-    ble.print(now.hour());
-    ble.print(now.minute());
-    ble.print(now.second());
-    ble.println(" ");
-    ble.waitForOK();
+  if (command.startsWith("sck")) {
+    handleSetClock(command);
+    return;
   }
 
-  else if (command.startsWith("sb")) {
-    String value = command.substring(2);
-    value.trim();
-
-    if (value.length() != 5) {
-      // 05 18
-      ble.print("AT+BLEUARTTX=");
-      ble.print("Invalid range format use: sh eh");
-      ble.println(" ");
-      ble.print("Where sh = start hour and eh = hour on 24 hour clock. each must be two digits long");
-      ble.println(" ");
-      ble.waitForOK();
-      return;
-    }
-    startHourSet = (value.substring(0, 2)).toInt();
-    endHourSet = (value.substring(2)).toInt();
+  if (command.startsWith("srg")) {
+    handleSetRange(command);
   }
 }
 
@@ -219,3 +172,124 @@ void heat(uint8_t percent) {
   uint8_t  g = percent > 50 ? 255 : floor((percent * 2) * 255 / 100);
   currentColor = strip.Color(r, g, 0);
 }
+
+void handleReset() {
+  reset();
+  if (ble.isConnected()) {
+    ble.print("AT+BLEUARTTX=");
+    ble.println("reset\n");
+    ble.waitForOK();
+  }
+}
+
+void handleGetTime() {
+  if (!ble.isConnected()) {
+    return;
+  }
+  DateTime now = rtc.now();
+  ble.print("AT+BLEUARTTX=");
+  blePrintTime(now.hour(), now.minute(), now.second());
+  ble.println(" ");
+  ble.waitForOK();
+}
+
+void handleGetDate() {
+  if (!ble.isConnected()) {
+    return;
+  }
+  DateTime now = rtc.now();
+  ble.print("AT+BLEUARTTX=");
+  blePrintDate(now.year(), now.month(), now.day());
+  ble.println(" ");
+  ble.waitForOK();
+}
+
+void handleSetClock(String &command) {
+  if (!ble.isConnected()) {
+    return;
+  }
+  String value = command.substring(3);
+  value.trim();
+
+  if (value.length() != 15) {
+    // 20180929 183429
+    ble.print("AT+BLEUARTTX=");
+    ble.println("Invalid date format use: yyyymmdd hhmmss");
+    ble.println(" ");
+    ble.waitForOK();
+    return;
+  }
+
+  int16_t year = (value.substring(0, 4)).toInt();
+  int8_t month = (value.substring(4, 6)).toInt();
+  int8_t day = (value.substring(6, 8)).toInt();
+  int8_t hour = (value.substring(9, 11)).toInt();
+  int8_t minute = (value.substring(11, 13)).toInt();
+  int8_t second = (value.substring(13)).toInt();
+
+  rtc.adjust(DateTime(year, month, day, hour, minute, second));
+  DateTime now = rtc.now();
+
+  ble.print("AT+BLEUARTTX=");
+  ble.print("clock set to: ");
+  blePrintDate(now.year(), now.month(), now.day());
+  ble.print(" ");
+  blePrintTime(now.hour(), now.minute(), now.second());
+  ble.println(" ");
+  ble.waitForOK();
+}
+
+void blePrintDate(int16_t year, int8_t month, int8_t day) {
+  ble.print(year);
+  ble.print("/");
+  if (month < 10) {
+    ble.print("0");
+  }
+  ble.print(month);
+  ble.print("/");
+  if (day < 10) {
+    ble.print("0");
+  }
+  ble.print(day);
+}
+
+void blePrintTime(int8_t hour, int8_t minute, int8_t second) {
+  if (hour < 10) {
+    ble.print("0");
+  }
+  ble.print(hour);
+  ble.print(":");
+  if (minute < 10) {
+    ble.print("0");
+  }
+  ble.print(minute);
+  ble.print(":");
+  if (second < 10) {
+    ble.print("0");
+  }
+  ble.print(second);
+}
+
+void handleSetRange(String &command) {
+  if (!ble.isConnected()) {
+    return;
+  }
+
+  String value = command.substring(3);
+  value.trim();
+
+  if (value.length() != 5) {
+    // 05 18
+    ble.print("AT+BLEUARTTX=");
+    ble.print("Invalid range format use: sh eh");
+    ble.println(" ");
+    ble.print("Where sh = start hour and eh = hour on 24 hour clock. each must be two digits long");
+    ble.println(" ");
+    ble.waitForOK();
+    return;
+  }
+  startHourSet = (value.substring(0, 2)).toInt();
+  endHourSet = (value.substring(2)).toInt();
+  setTimeVars();
+}
+
