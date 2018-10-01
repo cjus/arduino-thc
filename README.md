@@ -10,6 +10,10 @@ A Time Hacker Clock is a device based on the Time Hacker Method (THM). THM combi
 * Realtime clock
 * Support for various NeoPixel lighting modules
 
+## Design
+
+![](./fritzing/ArdunioTimeHackerClock_bb.png)
+
 ## Parts
 
 * [Adafruit Feather 32u4 Bluefruit LE](https://www.adafruit.com/product/2829)
