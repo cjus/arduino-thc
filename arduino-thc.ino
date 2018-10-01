@@ -15,9 +15,10 @@
 #include "BluefruitConfig.h"
 
 #define PIN 6
-#define LEDS 24
+#define RGBW false // is 4 LED Neopixel? RGB+White
+#define LEDS 24 // total number of LEDS in strip or ring
 
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(LEDS, PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(LEDS, PIN, ((RGBW) ? NEO_GRBW : NEO_GRB) + NEO_KHZ800);
 Adafruit_BluefruitLE_SPI ble(BLUEFRUIT_SPI_CS, BLUEFRUIT_SPI_IRQ, BLUEFRUIT_SPI_RST);
 
 uint32_t currentColor = strip.Color(0, 0, 0);

@@ -1,6 +1,9 @@
 # arduino-thc
 Arduino BLE Time Hacker Clock
 
+A Time Hacker Clock is a device based on the Time Hacker Method (THM). THM combines simple productivity guidelines with devices that emit shapes or colors to quickly convey how much time remains in a given day or time block.
+
+
 ## Features
 
 * Bluetooth BLE, constrollable via mobile phone
@@ -10,10 +13,11 @@ Arduino BLE Time Hacker Clock
 ## Parts
 
 * [Adafruit Feather 32u4 Bluefruit LE](https://www.adafruit.com/product/2829)
-* Adafruit NeoPixels:
+* Adafruit NeoPixels. Works with RGB/RGBW strings and rings:
   * [NeoPixel 5050 RGB LED](https://www.adafruit.com/product/1655 )
   * [NeoPixel Stick - 8 x 5050 RGB LED](https://www.adafruit.com/product/1426)
   * [NeoPixel Ring - 12 x 5050 RGB LED](https://www.adafruit.com/product/1643)
+  * [NeoPixel Ring - 12 x 5050 RGBW LED](https://www.adafruit.com/product/2853)
   * [NeoPixel Ring - 16 x 5050 RGB LED](https://www.adafruit.com/product/1463)
   * [NeoPixel FeatherWing - 4x8 RGB LED](https://www.adafruit.com/product/2945)
 * [Adafruit DS3231 Precision RTC Breakout](https://www.adafruit.com/product/3013)
