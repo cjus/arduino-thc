@@ -3,7 +3,6 @@ Arduino BLE Time Hacker Clock
 
 A Time Hacker Clock is a device based on the Time Hacker Method (THM). THM combines simple productivity guidelines with devices that emit shapes or colors to quickly convey how much time remains in a given day or time block.
 
-
 ## Features
 
 * Bluetooth BLE, constrollable via mobile phone
@@ -14,28 +13,14 @@ A Time Hacker Clock is a device based on the Time Hacker Method (THM). THM combi
 
 ![](./fritzing/ArdunioTimeHackerClock_bb.png)
 
-## Parts
-
-* [Adafruit Feather 32u4 Bluefruit LE](https://www.adafruit.com/product/2829)
-* Adafruit NeoPixels. Works with RGB/RGBW strings and rings:
-  * [NeoPixel 5050 RGB LED](https://www.adafruit.com/product/1655 )
-  * [NeoPixel Stick - 8 x 5050 RGB LED](https://www.adafruit.com/product/1426)
-  * [NeoPixel Ring - 12 x 5050 RGB LED](https://www.adafruit.com/product/1643)
-  * [NeoPixel Ring - 12 x 5050 RGBW LED](https://www.adafruit.com/product/2853)
-  * [NeoPixel Ring - 16 x 5050 RGB LED](https://www.adafruit.com/product/1463)
-  * [NeoPixel FeatherWing - 4x8 RGB LED](https://www.adafruit.com/product/2945)
-* [Adafruit DS3231 Precision RTC Breakout](https://www.adafruit.com/product/3013)
-* Enclosures:
-  * [Eightwood Aluminum Enclosure Electronic Project Box DIY Black -2.95" x 2.75" x 0.94](http://a.co/d/7EzhH0J)
-  * [Belleman Plastic Box (WCAH2855) 85 x 55 x 30 mm](https://www.velleman.eu/products/view/?id=17840)
-  * https://www.allelectronics.com/item/1551-fbk/pocket-size-project-box/1.html
 
 ## Software
+Make sure you have a recent version of the [Ardunio IDE](https://www.arduino.cc/en/Main/Software) installed.
+In the IDE under `Sketch > Include Library > Manage Libraries` search for and add the following libraries:
 
-In the Ardunio IDE
-
-"From the Sketch menu, > Include Library > Manage Libraries...  In the text input box type in "NeoPixel". Look for "Adafruit NeoPixel by Adafruit" and select the latest version by clicking on the dropbox menu next to the Install button"
-More on the Adafruit website: https://learn.adafruit.com/adafruit-neopixel-uberguide/arduino-library-installation
+* Adafruit BluefruitLE nRF51
+* Adafruit NeoPixel
+* RTCLib by Adafruit
 
 ### Third party Bluetooth mobile apps
 
@@ -80,7 +65,7 @@ sck 20181001 080206
 ```
 
 Date time is in `yyyymmdd hhmmss` format.
-Each field must be 2 digit and perceeded with a zero if necessary. The year is always a 4 digit field.
+Each field must be 2 digit and preceeded with a zero if necessary. The year is always a 4 digit field.
 
 Time must be in a 24 hour clock format.
 
@@ -104,3 +89,18 @@ Get the THC software version.
 ver
 ```
 
+## Parts
+
+* [Adafruit Feather 32u4 Bluefruit LE](https://www.adafruit.com/product/2829)
+* Adafruit NeoPixels. Works with RGB/RGBW strings and rings:
+  * [NeoPixel 5050 RGB LED](https://www.adafruit.com/product/1655 )
+  * [NeoPixel Stick - 8 x 5050 RGB LED](https://www.adafruit.com/product/1426)
+  * [NeoPixel Ring - 12 x 5050 RGB LED](https://www.adafruit.com/product/1643)
+  * [NeoPixel Ring - 12 x 5050 RGBW LED](https://www.adafruit.com/product/2853)
+  * [NeoPixel Ring - 16 x 5050 RGB LED](https://www.adafruit.com/product/1463)
+  * [NeoPixel FeatherWing - 4x8 RGB LED](https://www.adafruit.com/product/2945)
+* [Adafruit DS3231 Precision RTC Breakout](https://www.adafruit.com/product/3013)
+* Enclosures:
+  * [Eightwood Aluminum Enclosure Electronic Project Box DIY Black -2.95" x 2.75" x 0.94](http://a.co/d/7EzhH0J)
+  * [Belleman Plastic Box (WCAH2855) 85 x 55 x 30 mm](https://www.velleman.eu/products/view/?id=17840)
+  * https://www.allelectronics.com/item/1551-fbk/pocket-size-project-box/1.html
