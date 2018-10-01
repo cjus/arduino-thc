@@ -22,6 +22,8 @@ A Time Hacker Clock is a device based on the Time Hacker Method (THM). THM combi
   * [NeoPixel FeatherWing - 4x8 RGB LED](https://www.adafruit.com/product/2945)
 * [Adafruit DS3231 Precision RTC Breakout](https://www.adafruit.com/product/3013)
 * Enclosures:
+  * [Eightwood Aluminum Enclosure Electronic Project Box DIY Black -2.95" x 2.75" x 0.94](http://a.co/d/7EzhH0J)
+  * [Belleman Plastic Box (WCAH2855) 85 x 55 x 30 mm](https://www.velleman.eu/products/view/?id=17840)
   * https://www.allelectronics.com/item/1551-fbk/pocket-size-project-box/1.html
 
 ## Software
