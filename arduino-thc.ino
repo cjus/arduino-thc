@@ -14,6 +14,7 @@
 
 #include "BluefruitConfig.h"
 
+#define VERSION "0.3.0"
 #define PIN 6
 #define RGBW false // is 4 LED Neopixel? RGB+White
 #define LEDS 24 // total number of LEDS in strip or ring
@@ -73,6 +74,7 @@ void setupBLE(void) {
 
   ble.print("AT+GAPDEVNAME=");
   ble.println("Time Hacker Clock");
+  ble.waitForOK();
 
   /* Wait for connection */
   // while (!ble.isConnected()) {
@@ -80,11 +82,6 @@ void setupBLE(void) {
   // }
   // delay(2000);
 
-  ble.print("AT+BLEUARTTX=");
-  ble.println("Time Hacker Clock ver 0.3.0");
-  ble.println("");
-  ble.waitForOK();
-  delay(1000);
   reset();
 }
 
@@ -153,6 +150,11 @@ void processBLECommands() {
 
   if (command.startsWith("srg")) {
     handleSetRange(command);
+    return;
+  }
+
+  if (command.startsWith("ver")) {
+    handleGetVersion(command);
   }
 }
 
@@ -294,3 +296,13 @@ void handleSetRange(String &command) {
   setTimeVars();
 }
 
+void handleGetVersion() {
+  if (!ble.isConnected()) {
+    return;
+  }
+  ble.print("AT+BLEUARTTX=");
+  ble.print("Time Hacker Clock ver ");
+  ble.print(VERSION);
+  ble.println("");
+  ble.waitForOK();
+}
