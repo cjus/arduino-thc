@@ -5,7 +5,7 @@ A Time Hacker Clock is a device based on the Time Hacker Method (THM). THM combi
 
 ## Features
 
-* Bluetooth BLE, constrollable via mobile phone
+* Bluetooth BLE, controllable via mobile phone
 * Realtime clock
 * Support for various NeoPixel lighting modules
 
