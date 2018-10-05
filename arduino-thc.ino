@@ -14,7 +14,7 @@
 
 #include "BluefruitConfig.h"
 
-#define VERSION "0.3.0"
+#define VERSION "0.4.0"
 #define PIN 6
 #define RGBW false // is 4 LED Neopixel? RGB+White
 #define LEDS 1 // total number of LEDS in strip or ring
