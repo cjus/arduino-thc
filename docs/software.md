@@ -9,4 +9,4 @@ In the IDE under `Sketch > Include Library > Manage Libraries` search for and ad
 
 ---
 
-[Return to main](../README.md) | [Build device](../docs/build.md) | [Software setup](../doc/software.md) | [Controlling the clock](../docs/controlling.md)
+[Return to main](../README.md) | [Build device](../docs/build.md) | [Software setup](../docs/software.md) | [Controlling the clock](../docs/controlling.md)

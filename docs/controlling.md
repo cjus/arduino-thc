@@ -27,4 +27,4 @@ THC commands consist of three letter names optionally preceeded by one or more p
 
 ---
 
-[Return to main](../README.md) | [Build device](../docs/build.md) | [Software setup](../doc/software.md) | [Controlling the clock](../docs/controlling.md)
+[Return to main](../README.md) | [Build device](../docs/build.md) | [Software setup](../docs/software.md) | [Controlling the clock](../docs/controlling.md)

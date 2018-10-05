@@ -36,4 +36,4 @@ The realtime clock I chose was the `Adafruit DS3231 Precision RTC Breakout` so i
 
 ---
 
-[Return to main](../README.md) | [Build device](../docs/build.md) | [Software setup](../doc/software.md) | [Controlling the clock](../docs/controlling.md)
+[Return to main](../README.md) | [Build device](../docs/build.md) | [Software setup](../docs/software.md) | [Controlling the clock](../docs/controlling.md)
