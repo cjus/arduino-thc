@@ -11,7 +11,7 @@ A Time Hacker Clock is a device based on the Time Hacker Method (THM). THM combi
 
 ## Design
 
-<img src="./fritzing/ArdunioTimeHackerClock_bb.png" width="60%" />
+<img src="./fritzing/ArdunioTimeHackerClock_bb.png" width="80%" />
 
 I tested the design with various NeoPixels from Adafruit and they all worked well. I ultimately settled on a single WS2812B module which is lower costs and uses less power than an array of LEDS.
 
