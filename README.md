@@ -92,6 +92,7 @@ ver
 ## Parts
 
 * [Adafruit Feather 32u4 Bluefruit LE](https://www.adafruit.com/product/2829)
+* ALITOVE [WS2812B LED](http://a.co/d/adx7A64) Matrix
 * Adafruit NeoPixels. Works with RGB/RGBW strings and rings:
   * [NeoPixel 5050 RGB LED](https://www.adafruit.com/product/1655 )
   * [NeoPixel Stick - 8 x 5050 RGB LED](https://www.adafruit.com/product/1426)

@@ -17,7 +17,8 @@
 #define VERSION "0.3.0"
 #define PIN 6
 #define RGBW false // is 4 LED Neopixel? RGB+White
-#define LEDS 24 // total number of LEDS in strip or ring
+#define LEDS 1 // total number of LEDS in strip or ring
+#define BRIGHTNESS 100
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(LEDS, PIN, ((RGBW) ? NEO_GRBW : NEO_GRB) + NEO_KHZ800);
 Adafruit_BluefruitLE_SPI ble(BLUEFRUIT_SPI_CS, BLUEFRUIT_SPI_IRQ, BLUEFRUIT_SPI_RST);
@@ -43,6 +44,7 @@ void setup() {
   rtc.begin();
   setTimeVars();
 
+  strip.setBrightness(BRIGHTNESS);
   strip.begin();
   setupBLE();
   reset();
@@ -154,7 +156,7 @@ void processBLECommands() {
   }
 
   if (command.startsWith("ver")) {
-    handleGetVersion(command);
+    handleGetVersion();
   }
 }
 
