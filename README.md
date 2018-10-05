@@ -13,6 +13,6 @@ The colors used are from the [HSV color space](https://en.wikipedia.org/wiki/HSL
 
 The clock is powered by a small battery and controlled using a mobile app (Android / iOS) via Bluetooth.
 
-## Build instructions
+## Build your own device
 
 See the hardware and software [plans](./docs/build.md) for building your own version.
