@@ -43,6 +43,11 @@ THC commands consist of three letter names optionally preceeded by one or more p
 
 Commands are submitted via one of the above mobile applications via the UART terminal.
 
+|---|---|
+| Command | Description |
+|---|---|
+
+
 **Get date**
 
 Get the date set on the THC device.
