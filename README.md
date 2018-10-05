@@ -18,6 +18,6 @@ The clock is powered by a small battery and controlled using a mobile app (Andro
 Review these docs to build your own version.
 
 * [Build device](./docs/build.md)
-* [Software setup](./doc/software.md)
+* [Software setup](./docs/software.md)
 * [Controlling the clock](./docs/controlling.md)
 
