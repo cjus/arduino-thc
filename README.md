@@ -15,7 +15,7 @@ A Time Hacker Clock is a device based on the Time Hacker Method (THM). THM combi
 
 I tested the design with various NeoPixels from Adafruit and they all worked well. I ultimately settled on a single WS2812B module which is lower costs and uses less power than an array of LEDS.
 
-The realtime clock I chose was the Adafruit DS3231 Precision RTC Breakout so it's not exactly the one shown on the diagram above.
+The realtime clock I chose was the `Adafruit DS3231 Precision RTC Breakout` so it's not exactly the one shown on the diagram above.
 
 ## Software
 Make sure you have a recent version of the [Ardunio IDE](https://www.arduino.cc/en/Main/Software) installed.
@@ -39,63 +39,16 @@ The Ardunio THC can be controlled using anyone of several third party mobile app
 
 #### Supported commands
 
-THC commands consist of three letter names optionally preceeded by one or more parameters.
+THC commands consist of three letter names optionally preceeded by one or more parameters. Commands are submitted via one of the above mobile applications via the UART terminal.
 
-Commands are submitted via one of the above mobile applications via the UART terminal.
 
-|---|---|
 | Command | Description |
 |---|---|
-
-
-**Get date**
-
-Get the date set on the THC device.
-
-```shell
-gtd
-```
-
-**Get time**
-
-Get the current time on the THC realtime clock. You must do this when powering up your THC for the first time and when it becomes time to replace the THC battery. A xxxx battery should last about a year.
-
-```shell
-gtm
-```
-
-**Set clock**
-
-Set the current date and time.
-
-```shell
-sck 20181001 080206
-```
-
-Date time is in `yyyymmdd hhmmss` format.
-Each field must be 2 digit and preceeded with a zero if necessary. The year is always a 4 digit field.
-
-Time must be in a 24 hour clock format.
-
-**Set time block range**
-
-Set the duration of a time block by specifying a start hour and end hour.
-Each field must be 2 digit and perceeded with a zero if necessary.
-Time must be in a 24 hour clock format.
-
-```shell
-srg 05 20
-```
-
-The above example sets a time block range from 5am to 8pm.
-
-**Get version**
-
-Get the THC software version.
-
-```shell
-ver
-```
+| gtd |  Get the date set on the THC device. |
+| gtm | Get the current time on the THC realtime clock. You must do this when powering up your THC for the first time and when it becomes time to replace the THC battery. A xxxx battery should last about a year. |
+| sck | Set the current date and time. Date time is in `yyyymmdd hhmmss` format. Each field must be 2 digit and preceeded with a zero if necessary. The year is always a 4 digit field. Time must be in a 24 hour clock format. |
+| srg | Set the duration of a time block by specifying a start hour and end hour. Each field must be 2 digit and perceeded with a zero if necessary. Time must be in a 24 hour clock format. For example to set a time block range from 5am to 8pm use: srg 05 20 |
+| ver | Get the THC software version. |
 
 ## Parts
 
@@ -115,5 +68,5 @@ ver
     * [Eightwood Aluminum Enclosure Electronic Project Box DIY Black -2.95" x 2.75" x 0.94](http://a.co/d/7EzhH0J)
     * [Belleman Plastic Box (WCAH2855) 85 x 55 x 30 mm](https://www.velleman.eu/products/view/?id=17840)
     * https://www.allelectronics.com/item/1551-fbk/pocket-size-project-box/1.html
-* Battery power:
-  * Optional [Lithium Ion Polymer Battery - 3.7v 100mAh - 2500mAh](https://www.adafruit.com)
+* Battery power (optional):
+  * [Lithium Ion Polymer Battery - 3.7v 100mAh - 2500mAh](https://www.adafruit.com)
