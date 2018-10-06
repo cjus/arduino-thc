@@ -14,7 +14,7 @@
 
 #include "BluefruitConfig.h"
 
-#define VERSION "0.5.0"
+#define VERSION "0.6.0"
 #define PIN 6
 #define RGBW false // is 4 LED Neopixel? RGB+White
 #define LEDS 1 // total number of LEDS in strip or ring
@@ -36,8 +36,8 @@ uint8_t lastPercentRemaining = 0;
 RTC_DS3231 rtc;
 
 void setup() {
-//  Serial.begin(9600);
-//  delay(3000); // wait for console opening
+  Serial.begin(9600);
+  delay(3000); // wait for console opening
 //  Serial.print();
 //  Serial.println();
 
@@ -79,7 +79,7 @@ void setupBLE(void) {
   delay(2000);
 
   ble.print("AT+GAPDEVNAME=");
-  ble.println("Time Hacker Clock");
+  ble.println("Time Hacker Clock2");
   ble.waitForOK();
 
   /* Wait for connection */
@@ -307,14 +307,16 @@ void handleSetRange(String &command) {
   setTimeVars();
 }
 
-void handleBrightness(command) {
+void handleBrightness(String &command) {
   if (!ble.isConnected()) {
     return;
   }
   String value = command.substring(3);
   value.trim();
-  brightness = (value.substring(2)).toInt();
+  brightness = value.toInt();
+  Serial.println(brightness);  
   strip.setBrightness(brightness);
+  strip.show();
 }
 
 void handleGetVersion() {

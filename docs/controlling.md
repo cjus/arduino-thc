@@ -6,7 +6,7 @@ Commands consist of three letter names optionally preceeded by one or more param
 
 | Command | Example | Description |
 |---|---|---|
-| brt | `brt 100` | Set brightness level. A level is from zero to 100. |
+| brt | `brt 100` | Set brightness level. A level is from 10 to 100 percent. |
 | gtd | `gtd` | Get the date set on the THC device. |
 | gtm | `gtm` | Get the current time on the THC realtime clock. |
 | rst | `rst` | Reset clock to default setting. Sets the time range to 5am - 8pm. |

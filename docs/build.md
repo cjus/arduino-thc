@@ -1,7 +1,5 @@
 # Build instructions
 
-[Return to main](../README.md)
-
 ## Design
 
 <img src="./fritzing/ArdunioTimeHackerClock_bb.png" width="80%" />
