@@ -14,17 +14,17 @@
 
 #include "BluefruitConfig.h"
 
-#define VERSION "0.4.0"
+#define VERSION "0.5.0"
 #define PIN 6
 #define RGBW false // is 4 LED Neopixel? RGB+White
 #define LEDS 1 // total number of LEDS in strip or ring
-#define BRIGHTNESS 100
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(LEDS, PIN, ((RGBW) ? NEO_GRBW : NEO_GRB) + NEO_KHZ800);
 Adafruit_BluefruitLE_SPI ble(BLUEFRUIT_SPI_CS, BLUEFRUIT_SPI_IRQ, BLUEFRUIT_SPI_RST);
 
 uint32_t currentColor = strip.Color(0, 0, 0);
 uint32_t lastColor = currentColor;
+uint8_t brightness = 100;
 uint8_t startHourSet = 5; // 5am
 uint8_t endHourSet = 20; // 8pm
 uint32_t startTime;
@@ -44,7 +44,7 @@ void setup() {
   rtc.begin();
   setTimeVars();
 
-  strip.setBrightness(BRIGHTNESS);
+  strip.setBrightness(brightness);
   strip.begin();
   setupBLE();
   reset();
@@ -60,6 +60,10 @@ void reset() {
   lastColor = currentColor;
   currentColor = strip.Color(0, 0, 0);
   currentLEDCount = LEDS;
+  brightness = 100;
+  startHourSet = 5; // 5am
+  endHourSet = 20; // 8pm
+
   setMatrix(currentColor, currentLEDCount);
   setTimeVars();
 }
@@ -152,6 +156,11 @@ void processBLECommands() {
 
   if (command.startsWith("srg")) {
     handleSetRange(command);
+    return;
+  }
+
+  if (command.startsWith("brt")) {
+    handleBrightness(command);
     return;
   }
 
@@ -296,6 +305,16 @@ void handleSetRange(String &command) {
   startHourSet = (value.substring(0, 2)).toInt();
   endHourSet = (value.substring(2)).toInt();
   setTimeVars();
+}
+
+void handleBrightness(command) {
+  if (!ble.isConnected()) {
+    return;
+  }
+  String value = command.substring(3);
+  value.trim();
+  brightness = (value.substring(2)).toInt();
+  strip.setBrightness(brightness);
 }
 
 void handleGetVersion() {
