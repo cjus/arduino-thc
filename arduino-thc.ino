@@ -14,7 +14,7 @@
 
 #include "BluefruitConfig.h"
 
-#define VERSION "0.6.0"
+#define VERSION "0.8.0"
 #define PIN 6
 #define RGBW false // is 4 LED Neopixel? RGB+White
 #define LEDS 1 // total number of LEDS in strip or ring
@@ -36,10 +36,10 @@ uint8_t lastPercentRemaining = 0;
 RTC_DS3231 rtc;
 
 void setup() {
-  Serial.begin(9600);
-  delay(3000); // wait for console opening
-//  Serial.print();
-//  Serial.println();
+  // Serial.begin(9600);
+  // delay(3000); // wait for console opening
+  // Serial.print();
+  // Serial.println();
 
   rtc.begin();
   setTimeVars();
@@ -79,20 +79,15 @@ void setupBLE(void) {
   delay(2000);
 
   ble.print("AT+GAPDEVNAME=");
-  ble.println("Time Hacker Clock2");
+  ble.println("Time Hacker Clock");
   ble.waitForOK();
-
-  /* Wait for connection */
-  // while (!ble.isConnected()) {
-  //   delay(500);
-  // }
-  // delay(2000);
-
   reset();
 }
 
 void loop() {
-  processBLECommands();
+  if (ble.isConnected()) {
+    processBLECommands();
+  }
 
   DateTime now = rtc.now();
   float percentFactor = 100.0;
@@ -122,18 +117,15 @@ void loop() {
 }
 
 void processBLECommands() {
-  if (!ble.isConnected()) {
-    return;
-  }
   // Check for incoming characters from Bluefruit
   ble.println("AT+BLEUARTRX");
   ble.readline();
 
-  String command = String(ble.buffer);
-  if (!command.length()) {
+  if (strcmp(ble.buffer, "OK") == 0) {
     return;
   }
 
+  String command = String(ble.buffer);
   if (strcmp(ble.buffer, "rst") == 0) {
     handleReset();
     return;
@@ -146,6 +138,11 @@ void processBLECommands() {
 
   if (command.startsWith("gdt")) {
     handleGetDate();
+    return;
+  }
+
+  if (command.startsWith("grg")) {
+    handleGetRange();
     return;
   }
 
@@ -166,7 +163,12 @@ void processBLECommands() {
 
   if (command.startsWith("ver")) {
     handleGetVersion();
+    return;
   }
+
+  String s = "Error, unknown command: ";
+  s += command;
+  blePrint(s);
 }
 
 void setMatrix(uint32_t color, uint8_t count) {
@@ -189,48 +191,28 @@ void heat(uint8_t percent) {
 
 void handleReset() {
   reset();
-  if (ble.isConnected()) {
-    ble.print("AT+BLEUARTTX=");
-    ble.println("reset\n");
-    ble.waitForOK();
-  }
+  String s = "reset";
+  blePrint(s);
 }
 
 void handleGetTime() {
-  if (!ble.isConnected()) {
-    return;
-  }
   DateTime now = rtc.now();
-  ble.print("AT+BLEUARTTX=");
   blePrintTime(now.hour(), now.minute(), now.second());
-  ble.println(" ");
-  ble.waitForOK();
 }
 
 void handleGetDate() {
-  if (!ble.isConnected()) {
-    return;
-  }
   DateTime now = rtc.now();
-  ble.print("AT+BLEUARTTX=");
   blePrintDate(now.year(), now.month(), now.day());
-  ble.println(" ");
-  ble.waitForOK();
 }
 
 void handleSetClock(String &command) {
-  if (!ble.isConnected()) {
-    return;
-  }
   String value = command.substring(3);
   value.trim();
 
   if (value.length() != 15) {
     // 20180929 183429
-    ble.print("AT+BLEUARTTX=");
-    ble.println("Invalid date format use: yyyymmdd hhmmss");
-    ble.println(" ");
-    ble.waitForOK();
+    String s = "Invalid date format use: yyyymmdd hhmmss";
+    blePrint(s);
     return;
   }
 
@@ -244,88 +226,99 @@ void handleSetClock(String &command) {
   rtc.adjust(DateTime(year, month, day, hour, minute, second));
   DateTime now = rtc.now();
 
-  ble.print("AT+BLEUARTTX=");
-  ble.print("clock set to: ");
+  String s = "Clock set to: ";
+  blePrint(s);
   blePrintDate(now.year(), now.month(), now.day());
-  ble.print(" ");
   blePrintTime(now.hour(), now.minute(), now.second());
-  ble.println(" ");
-  ble.waitForOK();
 }
 
 void blePrintDate(int16_t year, int8_t month, int8_t day) {
-  ble.print(year);
-  ble.print("/");
+  String s;
+  s += year;
+  s += "/";
   if (month < 10) {
-    ble.print("0");
+    s += "0";
   }
-  ble.print(month);
-  ble.print("/");
+  s += month;
+  s += "/";
   if (day < 10) {
-    ble.print("0");
+    s += "0";
   }
-  ble.print(day);
+  s += day;
+  blePrint(s);
 }
 
 void blePrintTime(int8_t hour, int8_t minute, int8_t second) {
+  String s;
   if (hour < 10) {
-    ble.print("0");
+    s += "0";
   }
-  ble.print(hour);
-  ble.print(":");
+  s += hour;
+  s += ":";
   if (minute < 10) {
-    ble.print("0");
+    s += "0";
   }
-  ble.print(minute);
-  ble.print(":");
+  s += minute;
+  s += ":";
   if (second < 10) {
-    ble.print("0");
+    s += "0";
   }
-  ble.print(second);
+  s += second;
+  blePrint(s);
 }
 
 void handleSetRange(String &command) {
-  if (!ble.isConnected()) {
-    return;
-  }
-
   String value = command.substring(3);
   value.trim();
 
   if (value.length() != 5) {
-    // 05 18
-    ble.print("AT+BLEUARTTX=");
-    ble.print("Invalid range format use: sh eh");
-    ble.println(" ");
-    ble.print("Where sh = start hour and eh = hour on 24 hour clock. each must be two digits long");
-    ble.println(" ");
-    ble.waitForOK();
+    String s = "Invalid range format use: sh eh\\r\\nWhere sh = start hour and eh = hour on 24 hour clock. each must be two digits long";
+    blePrint(s);
     return;
   }
   startHourSet = (value.substring(0, 2)).toInt();
   endHourSet = (value.substring(2)).toInt();
   setTimeVars();
+  String s = "Range set: ";
+  s += startHourSet;
+  s += " ";
+  s += endHourSet;
+  blePrint(s);
+}
+
+void handleGetRange() {
+  String s = "Time block range: ";
+  s += startHourSet;
+  s += " ";
+  s += endHourSet;
+  blePrint(s);
 }
 
 void handleBrightness(String &command) {
-  if (!ble.isConnected()) {
-    return;
-  }
   String value = command.substring(3);
   value.trim();
   brightness = value.toInt();
-  Serial.println(brightness);  
   strip.setBrightness(brightness);
   strip.show();
+  String s = "Brightness set to: ";
+  s += brightness;
+  blePrint(s);
 }
 
 void handleGetVersion() {
+  String s = "Time Hacker Clock ver ";
+  s += VERSION;
+  blePrint(s);
+}
+
+void blePrint(String &s) {
   if (!ble.isConnected()) {
     return;
   }
-  ble.print("AT+BLEUARTTX=");
-  ble.print("Time Hacker Clock ver ");
-  ble.print(VERSION);
-  ble.println("");
+  String ns = "AT+BLEUARTTX=";
+  ns += s;
+  ns += "\\r\\n";
+  ble.println(ns);
   ble.waitForOK();
 }
+
