@@ -22,3 +22,11 @@ Review these docs to build your own version.
 * [Software setup](./docs/software.md)
 * [Controlling the clock](./docs/controlling.md)
 
+
+## Other Time Hacker Clocks
+
+* [raspi-thc](https://github.com/cjus/raspi-thc) - The Raspberry Pi - Time Hacker Clock
+* [web-thc](https://github.com/cjus/web-thc) The web-based Time Hacker Clock
+
+
+
